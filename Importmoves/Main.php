@@ -5,11 +5,11 @@ namespace IdnoPlugins\Importmoves {
     class Main extends \Idno\Common\Plugin {
 
         function registerPages() {
-            \Idno\Core\site()->addPageHandler('importmoves/auth', '\IdnoPlugins\Importmoves\Pages\Auth');
-            \Idno\Core\site()->addPageHandler('importmoves/deauth', '\IdnoPlugins\Importmoves\Pages\DeAuth');
+            \Idno\Core\site()->addPageHandler('importmoves/auth',     '\IdnoPlugins\Importmoves\Pages\Auth');
+            \Idno\Core\site()->addPageHandler('importmoves/deauth',   '\IdnoPlugins\Importmoves\Pages\DeAuth');
             \Idno\Core\site()->addPageHandler('importmoves/callback', '\IdnoPlugins\Importmoves\Pages\Callback');
-            \Idno\Core\site()->addPageHandler('admin/importmoves', '\IdnoPlugins\Importmoves\Pages\Admin');
-            \Idno\Core\site()->addPageHandler('account/importmoves', '\IdnoPlugins\Importmoves\Pages\Account');
+            \Idno\Core\site()->addPageHandler('admin/importmoves',    '\IdnoPlugins\Importmoves\Pages\Admin');
+            \Idno\Core\site()->addPageHandler('account/importmoves',  '\IdnoPlugins\Importmoves\Pages\Account');
             /** Template extensions */
             // Add menu items to account & administration screens
             \Idno\Core\site()->template()->extendTemplate('admin/menu/items', 'admin/importmoves/menu');
@@ -30,7 +30,7 @@ namespace IdnoPlugins\Importmoves {
                 $params = array(
                     'moves_client_id' => \Idno\Core\site()->config()->importmoves['moves_client_id'],
                     'moves_client_secret' => \Idno\Core\site()->config()->importmoves['moves_client_secret'],
-                    'moves_redirect_uri' => \Idno\Core\site()->config()->importmoves['moves_callback_url']
+                    'moves_redirect_uri' => \Idno\Core\site()->config()->importmoves['moves_redirect_url']
                 );
                 $client_id = \Idno\Core\site()->config()->importmoves['moves_client_id'];
                 $client_secret = \Idno\Core\site()->config()->importmoves['moves_client_secret'];

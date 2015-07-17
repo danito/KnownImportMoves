@@ -16,7 +16,7 @@
                         To import your Moves summary, we need the client ID, the client Secret and the moves api url.
                     </p>
                     <p>
-                        You find this when creatin a new App on the <a href="http://dev.moves-app.com" target="_blank">http://dev.moves-app.com</a> page.
+                        You find this when creating a new App on the <a href="http://dev.moves-app.com" target="_blank">http://dev.moves-app.com</a> page.
                     </p>
 
                 </div>
@@ -26,6 +26,10 @@
                 <p>
                     Fill in the details below:
                 </p>
+                <label class="control-label" for="moves_redirect_url">Moves redirect url should be set to </label>
+
+                <input type="url" id="moves_redirect_url" placeholder="" class="form-control" name="moves_redirect_url" value="<?=\Idno\Core\site()->config()->url . 'importmoves/callback'?>"  >
+                
                 <label class="control-label" for="moves_client_id">Moves Client Id</label>
 
                 <input type="text" id="moves_client_id" placeholder="client_id" class="form-control" name="moves_client_id" value="<?= htmlspecialchars(\Idno\Core\site()->config()->importmoves['moves_client_id']) ?>" >
