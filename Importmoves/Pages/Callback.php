@@ -22,7 +22,7 @@ namespace IdnoPlugins\Importmoves\Pages {
                     $importmovesApi->config['moves_user_token'] =  $access_token;
                     $importmovesApi->config['moves_user_refresh_token'] = $tokens['refresh_token'];
                     $user = \Idno\Core\site()->session()->currentUser();
-                    $user->$importmoves[$profile['userId']] = array(
+                    $user->$importmoves = array(
                         user_token => $access_token,
                         user_refresh_token => $tokens['refresh_token'],
                         user_id => $profile['userId']

@@ -2,7 +2,7 @@
 
     <div class="col-md-10 col-md-offset-1">
         <?= $this->draw('account/menu') ?>
-        <h1>Twitter</h1>
+        <h1>import Moves</h1>
 
     </div>
 
@@ -41,6 +41,43 @@
 
                     <?php
                 } else {
+                    //check if token is still valid
+                    $user_tokens = \Idno\Core\site()->session()->currentUser()->importmoves;
+                    $access_token = $user_tokens['user_token'];
+                    $refresh_token = $user_tokens['refresh_token'];
+                    $importmoves = \Idno\Core\site()->plugins()->get('importmoves');
+                    $validation = $importmoves->getTokenValidation($access_token);
+                    $refresh = false;
+                    if ($validation === FALSE) {
+                        $refresh = $importmoves->refreshToken($refresh_token);
+                    }
+                    if ($refresh == false) {
+                        ?>
+                        <div class="control-group">
+                            <div class="controls-config">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <p>
+                                            Ooops something went wrong. Please disconnect from Moves and retry again.
+                                        </p>
+
+                                        <div class="social">
+                                            <p>
+                                                <input type="hidden" name="remove" value="1" />
+                                                <button type="submit" class="connect moves connected">Disconnect Moves</button>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row">
+
+                    </div>
+                    <?php
+                } else {
                     ?>
                     <div class="control-group">
                         <div class="controls-config">
@@ -52,10 +89,8 @@
 
                                     <div class="social">
                                         <p>
-                                            <input type="hidden" name="remove" class="form-control" value="<?= $account['username'] ?>"/>
-                                            <button type="submit" class="connect moves connected">
-                                                (Disconnect)
-                                            </button>
+                                            <input type="hidden" name="remove" value="1" />
+                                            <button type="submit" class="connect moves connected">Disconnect Moves</button>
                                         </p>
                                     </div>
 
@@ -63,9 +98,14 @@
                             </div>
                         </div>
                     </div>
-                </form>
-        
-                <?php
+                    </form>
+                    <div class="row">
+                        <?php
+                        
+                        ?>
+                    </div>
+                    <?php
+                }
             }
         } else {
             if (\Idno\Core\site()->session()->currentUser()->isAdmin()) {

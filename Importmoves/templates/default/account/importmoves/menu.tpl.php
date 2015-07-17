@@ -1,0 +1,1 @@
+<li <?php if ($_SERVER['REQUEST_URI'] == '/account/importmoves/') echo 'class="active"'; ?>><a href="/account/importmoves/">import Moves</a></li>
