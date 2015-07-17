@@ -30,7 +30,7 @@ namespace IdnoPlugins\Importmoves\Pages {
                     $user->save();
                     \Idno\Core\site()->session()->addMessage('Your Moves credentials were saved.');
                 } else {
-                    \Idno\Core\site()->session()->addMessage('Your Twitter credentials could not be saved.');
+                    \Idno\Core\site()->session()->addMessage('Your Moves credentials could not be saved.');
                 }
             }
         }

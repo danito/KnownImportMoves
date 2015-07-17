@@ -19,8 +19,9 @@
                     $oauth_url = $twitter->getAuthURL();
                 }*/
                 $oauth_url = \Idno\Core\site()->config()->getDisplayURL() . 'importmoves/auth';
+                $summary = "This should be your daily summary";
                 $t = \Idno\Core\site()->template();
-                $body = $t->__(array('oauth_url' => $oauth_url))->draw('account/importmoves');
+                $body = $t->__(array('oauth_url' => $oauth_url, 'summary' => $summary))->draw('account/importmoves');
                 $t->__(array('title' => 'Import Moves', 'body' => $body))->drawPage();
             }
 
