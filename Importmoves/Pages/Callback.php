@@ -11,27 +11,32 @@ namespace IdnoPlugins\Importmoves\Pages {
      */
     class Callback extends \Idno\Common\Page {
 
-        function get() {
+        function getContent() {
             $this->gateKeeper();
+            
             if ($request_token = $this->getInput('code')) {
-                if ($importmoves = \Idno\Core\site()->plugins()->get('importmoves')) {
+                error_log("Code: ". $this->getInput('code'));
+            
+                if ($importmoves = \Idno\Core\site()->plugins()->get('Importmoves')) {
+                    error_log("Importmoves ok");
                     $importmovesApi = $importmoves->connect();
                     $tokens = $importmovesApi->auth($request_token);
                     $access_token = $tokens['access_token'];
-                    $profile = $importmovesApi->getProfile($access_token);
-                    $importmovesApi->config['moves_user_token'] =  $access_token;
-                    $importmovesApi->config['moves_user_refresh_token'] = $tokens['refresh_token'];
+                    $profile = $importmovesApi->get_profile($access_token);
+                    $importmoves->config['moves_user_token'] =  $access_token;
+                    $importmoves->config['moves_user_refresh_token'] = $tokens['refresh_token'];
                     $user = \Idno\Core\site()->session()->currentUser();
-                    $user->$importmoves = array(
-                        user_token => $access_token,
-                        user_refresh_token => $tokens['refresh_token'],
-                        user_id => $profile['userId']
+                    $user->importmoves = array(
+                        'user_token' => $access_token,
+                        'user_refresh_token' => $tokens['refresh_token'],
+                        "user_id" => $profile['userId']
                             );
                     $user->save();
                     \Idno\Core\site()->session()->addMessage('Your Moves credentials were saved.');
                 } else {
                     \Idno\Core\site()->session()->addMessage('Your Moves credentials could not be saved.');
                 }
+                $this->forward('/account/importmoves/');
             }
         }
 

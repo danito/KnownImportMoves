@@ -5,6 +5,7 @@ namespace IdnoPlugins\Importmoves {
     class Main extends \Idno\Common\Plugin {
 
         function registerPages() {
+           
             \Idno\Core\site()->addPageHandler('importmoves/auth',     '\IdnoPlugins\Importmoves\Pages\Auth');
             \Idno\Core\site()->addPageHandler('importmoves/deauth',   '\IdnoPlugins\Importmoves\Pages\DeAuth');
             \Idno\Core\site()->addPageHandler('importmoves/callback', '\IdnoPlugins\Importmoves\Pages\Callback');
@@ -26,6 +27,7 @@ namespace IdnoPlugins\Importmoves {
 
         function connect($access_token = FALSE) {
             require_once(dirname(__FILE__) . '/external/PHPMoves.php');
+            error_log("ext: ". dirname(__FILE__) . '/external/PHPMoves.php');
             if (!empty(\Idno\Core\site()->config()->importmoves)) {
                 $params = array(
                     'moves_client_id' => \Idno\Core\site()->config()->importmoves['moves_client_id'],
@@ -34,22 +36,24 @@ namespace IdnoPlugins\Importmoves {
                 );
                 $client_id = \Idno\Core\site()->config()->importmoves['moves_client_id'];
                 $client_secret = \Idno\Core\site()->config()->importmoves['moves_client_secret'];
-                $redirect_url = \Idno\Core\site()->config()->importmoves['moves_callback_url'];
+                $redirect_url = \Idno\Core\site()->config()->importmoves['moves_redirect_url'];
 
-                return new \PHPMoves\Moves($client_id, $client_secret, $redirect_url);
+                $phpmoves = new \PHPMoves\Moves($client_id, $client_secret, $redirect_url);
+                
+                return $phpmoves;
             }
             return false;
         }
 
         function getTokenValidation($access_token) {
             $importmoves = $this;
-            $importmovesApi = $this->connect();
+            $importmovesApi = $importmoves->connect();
             return $importmovesApi->validate_token($access_token);
         }
 
         function refreshToken($refresh_token) {
             $importmoves = $this;
-            $importmovesApi = $this->connect();
+            $importmovesApi = $importmoves->connect();
             $tokens = $importmovesApi->refresh($refresh_token);
             if (!empty($tokens)){
             $user = \Idno\Core\site()->session()->currentUser();            
@@ -67,15 +71,20 @@ namespace IdnoPlugins\Importmoves {
 
         function getProfile($access_token) {
             $importmoves = $this;
-            $importmovesApi = $this->connect();
+            $importmovesApi = $importmoves->connect();
             $profile = $importmovesApi->get_profile($access_token);
             return $profile;
         }
+        function getDailySummary($access_token,$start) {            
+            return $this->getRange($access_token, $start, $start);
+
+        }
         
-        function getRange($access_token, $endpoint = '/user/summary/daily', $start, $end) {
-            $importmoves = $this;
-            $importmovesApi = $this->connect();
-            $summary = $importmovesApi->getRange($access_token,$endpoint,$start,$end);
+        function getRange($access_token, $start, $end) {
+            $endpoint = '/user/summary/daily';
+                    $importmoves = $this;
+            $importmovesApi = $importmoves->connect();
+            $summary = $importmovesApi->get_range($access_token,$endpoint,$start,$end);
             if ($summary){
                 return $summary;
             } else return false;

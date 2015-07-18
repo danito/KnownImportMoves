@@ -9,8 +9,9 @@
 </div>
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
+
         <?php
-        if (!empty(\Idno\Core\site()->config()->importmoves['client_id']) && !empty(\Idno\Core\site()->config()->importmoves['client_secret'])) {
+        if (!empty(\Idno\Core\site()->config()->importmoves['moves_client_id']) && !empty(\Idno\Core\site()->config()->importmoves['moves_client_secret'])) {
             ?>
             <form action="<?= \Idno\Core\site()->config()->getDisplayURL() ?>account/importmoves/" class="form-horizontal" method="post">
                 <?php
@@ -45,11 +46,15 @@
                     $user_tokens = \Idno\Core\site()->session()->currentUser()->importmoves;
                     $access_token = $user_tokens['user_token'];
                     $refresh_token = $user_tokens['refresh_token'];
-                    $importmoves = \Idno\Core\site()->plugins()->get('importmoves');
+                    $importmoves = \Idno\Core\site()->plugins()->get('Importmoves');
+
                     $validation = $importmoves->getTokenValidation($access_token);
+                    error_log("validation: " . print_r($validation));
                     $refresh = false;
                     if ($validation === FALSE) {
                         $refresh = $importmoves->refreshToken($refresh_token);
+                    } else {
+                        $refresh = true;
                     }
                     if ($refresh == false) {
                         ?>
@@ -101,15 +106,28 @@
                     </form>
                     <div class="row">
                         <?php
+                        $yesterday = date('Y-m-d', strtotime('yesterday'));
+                        $moves = $importmoves->getDailySummary($access_token, $yesterday);
+                        $summary = $moves[0]['summary'];                        
+                        $mymoves = array();
+                        $totaldistance = 0;
+                        foreach ($summary as $activity) {
+                            $a = $activity['activity'];
+                            $k = $activity['distance'];
+                            $totaldistance += $k;
+                            $mymoves[$a] = $k;                            
+                        }                       
+                        arsort($mymoves,SORT_NUMERIC);
+                        
                         
                         ?>
                     </div>
-                    <?php
+                        <?php
+                    }
                 }
-            }
-        } else {
-            if (\Idno\Core\site()->session()->currentUser()->isAdmin()) {
-                ?>
+            } else {
+                if (\Idno\Core\site()->session()->currentUser()->isAdmin()) {
+                    ?>
                 <div class="control-group">
                     <div class="controls-config">
                         <div class="row">
@@ -121,9 +139,9 @@
                                     <a href="<?= \Idno\Core\site()->config()->getDisplayURL() ?>admin/importmoves/">Click here to begin
                                         Moves configuration.</a>
                                 </p>
-                                <?php
-                            } else {
-                                ?>
+        <?php
+    } else {
+        ?>
                                 <p>
                                     The administrator has not finished setting up Twitter on this site.
                                     Please come back later.
@@ -133,9 +151,9 @@
                     </div>
                 </div>
 
-                <?php
-            }
-            ?>
+        <?php
+    }
+    ?>
             <?php
         }
         ?>
