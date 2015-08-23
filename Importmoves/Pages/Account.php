@@ -11,7 +11,6 @@
          */
         class Account extends \Idno\Common\Page
         {
-
             function getContent()
             {
                 $this->gatekeeper(); // Logged-in users only

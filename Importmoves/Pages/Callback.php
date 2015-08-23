@@ -26,10 +26,14 @@ namespace IdnoPlugins\Importmoves\Pages {
                     $importmoves->config['moves_user_token'] =  $access_token;
                     $importmoves->config['moves_user_refresh_token'] = $tokens['refresh_token'];
                     $user = \Idno\Core\site()->session()->currentUser();
+                    $firstactivity = $user->created;
+                            
                     $user->importmoves = array(
                         'user_token' => $access_token,
                         'user_refresh_token' => $tokens['refresh_token'],
-                        "user_id" => $profile['userId']
+                        "user_id" => $profile['userId'],
+                        "user_first_date" => $profile['profile']['firstDate'],
+                        "user_last_import" => $firstactivity
                             );
                     $user->save();
                     \Idno\Core\site()->session()->addMessage('Your Moves credentials were saved.');

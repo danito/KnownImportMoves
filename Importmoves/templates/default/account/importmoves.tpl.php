@@ -30,8 +30,8 @@
 
                                     <div class="social">
                                         <p>
-                                            <a href="<?= $vars['oauth_url'] ?>" class="connect tw">
-                                                Connect Moves</a>
+                                            <a href="<?= $vars['oauth_url'] ?>" class="btn btn-primary">
+                                                <i class="fa fa-globe"></i> Connect Moves</a>
                                         </p>
                                     </div>
                                 </div>
@@ -49,7 +49,6 @@
                     $importmoves = \Idno\Core\site()->plugins()->get('Importmoves');
 
                     $validation = $importmoves->getTokenValidation($access_token);
-                    error_log("validation: " . print_r($validation));
                     $refresh = false;
                     if ($validation === FALSE) {
                         $refresh = $importmoves->refreshToken($refresh_token);
@@ -69,7 +68,7 @@
                                         <div class="social">
                                             <p>
                                                 <input type="hidden" name="remove" value="1" />
-                                                <button type="submit" class="connect moves connected">Disconnect Moves</button>
+                                                <button type="submit" class="btn btn-success"> <i class="fa fa-globe"></i> Disconnect Moves</button>
                                             </p>
                                         </div>
 
@@ -95,7 +94,7 @@
                                     <div class="social">
                                         <p>
                                             <input type="hidden" name="remove" value="1" />
-                                            <button type="submit" class="connect moves connected">Disconnect Moves</button>
+                                            <button type="submit" class="btn btn-success"><i class="fa fa-globe"></i> Disconnect Moves</button>
                                         </p>
                                     </div>
 
@@ -106,28 +105,63 @@
                     </form>
                     <div class="row">
                         <?php
-                        $yesterday = date('Y-m-d', strtotime('yesterday'));
+                        $strDate = '7 July 2015';
+                        $yesterday = date('Y-m-d', strtotime($strDate));
                         $moves = $importmoves->getDailySummary($access_token, $yesterday);
-                        $summary = $moves[0]['summary'];                        
-                        $mymoves = array();
-                        $totaldistance = 0;
+                        $summary = $moves[0]['summary'];
+                        $day = array();
+                        $movesorder = array();
+                        $totaldistance = $totalsteps = 0;
+                        $tags = "#moves ";
                         foreach ($summary as $activity) {
                             $a = $activity['activity'];
-                            $k = $activity['distance'];
-                            $totaldistance += $k;
-                            $mymoves[$a] = $k;                            
-                        }                       
-                        arsort($mymoves,SORT_NUMERIC);
-                        
+                            $tags = $tags. "#".$a." ";
+                            $daytmp[$a]['distance'] = $activity['distance'];
+                            $daytmp[$a]['duration'] = $activity['duration'];
+                            $daytmp[$a]['steps'] = $activity['steps'];
+                            $movesorder[$a] = $activity['distance'];
+                        }
+                        arsort($movesorder, SORT_NUMERIC);
+                        foreach ($movesorder as $key => $value) {
+                            $day[$key] = $daytmp[$key];
+                        }
+                        $dir = \Idno\Core\site()->config()->getTempDir();
+                        $data = $importmoves->construct_activity_group_array($moves[0]);
+                        $dataset = $importmoves->construct_image($data['data2']);
+                        $movesimage = $dataset['moveimage'];
+                        $firstactivity = \Idno\Core\site()->session()->currentUser()->created;
+
                         
                         ?>
+                        <div class="row idno-entry">
+                            <hr>
+                            <div style="font-size: 0.85em">
+                                <smaller>Your Moves' activities since <?= date('j F Y', $firstactivity) ?> are ready to be published:</smaller>
+                            </div>
+                            <h2>My Moves for <?= date('j F Y', strtotime($strDate)) ?></h2>
+                            
+                            
+                            <?php
+                            $content = $importmoves->construct_content($day);
+                            $diagram = $importmoves->construct_image_js($data['data2'], $yesterday);
+                            echo $diagram . "<p>" . $content . "<br/>".$tags;
+                            ?>
+                            <form action="<?= \Idno\Core\site()->config()->getDisplayURL() ?>importmoves/save" class="form-horizontal" method="post">
+                                <div class="social">
+                                    <p>
+                                        <input type="hidden" name="publish" value="1" />
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-globe"></i> Import</button>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                        <?php
-                    }
+                    <?php
                 }
-            } else {
-                if (\Idno\Core\site()->session()->currentUser()->isAdmin()) {
-                    ?>
+            }
+        } else {
+            if (\Idno\Core\site()->session()->currentUser()->isAdmin()) {
+                ?>
                 <div class="control-group">
                     <div class="controls-config">
                         <div class="row">
@@ -139,9 +173,9 @@
                                     <a href="<?= \Idno\Core\site()->config()->getDisplayURL() ?>admin/importmoves/">Click here to begin
                                         Moves configuration.</a>
                                 </p>
-        <?php
-    } else {
-        ?>
+                                <?php
+                            } else {
+                                ?>
                                 <p>
                                     The administrator has not finished setting up Twitter on this site.
                                     Please come back later.
@@ -151,9 +185,9 @@
                     </div>
                 </div>
 
-        <?php
-    }
-    ?>
+                <?php
+            }
+            ?>
             <?php
         }
         ?>
