@@ -17,14 +17,16 @@ foreach ($summary as $activity) {
     $a = $activity['activity'];
     $tags = $tags . "#" . $a . " ";   
 }
-$data = $importmoves->construct_activity_group_array($summary);
+
+$data = $importmoves->construct_activity_group_array($moves[0]);
 $dataset = json_encode($data['data2']);
 $content = $importmoves->construct_content($summary);
 $fulldate = date('j F Y', strtotime('yesterday'));
 $titel = "My Moves for {$fulldate}";
+
 $vars['object']->title = $titel;
 $vars['object']->body = $content;
-$vars['object']->data = json_encode($summary);
+$vars['object']->data = json_encode($data);
 $day = $vars['object']->day = date('Ymd', strtotime('yesterday'));
 $vars['object']->tags = $tags;
 ?>

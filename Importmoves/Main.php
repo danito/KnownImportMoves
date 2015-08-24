@@ -24,6 +24,11 @@ namespace IdnoPlugins\Importmoves {
             \Idno\Core\site()->template()->extendTemplate('shell/head', 'importmoves/shell/head');
         }
 
+        /**
+         * Returns the Api url with request token
+         * https://dev.moves-app.com/docs/authentication#authorization
+         * @return string $request_url
+         */
         function getReqUrl() {
             $importmoves = $this;
             $importmovesApi = $importmoves->connect();
@@ -51,12 +56,24 @@ namespace IdnoPlugins\Importmoves {
             return false;
         }
 
+        /**
+         * Returns token details if valid or error
+         * https://dev.moves-app.com/docs/authentication#validatetoken
+         * @param string $access_token
+         * @return type
+         */
         function getTokenValidation($access_token) {
             $importmoves = $this;
             $importmovesApi = $importmoves->connect();
             return $importmovesApi->validate_token($access_token);
         }
 
+        /**
+         * Checks if token is valid and refreshs if not
+         * https://dev.moves-app.com/docs/authentication#refreshtoken
+         * @param string $refresh_token
+         * @return boolean
+         */
         function refreshToken($refresh_token) {
             $importmoves = $this;
             $importmovesApi = $importmoves->connect();
@@ -74,6 +91,12 @@ namespace IdnoPlugins\Importmoves {
             }
         }
 
+        /**
+         * Returns Moves-App profile details 
+         * https://dev.moves-app.com/docs/api_profile
+         * @param string $access_token
+         * @return array
+         */
         function getProfile($access_token) {
             $importmoves = $this;
             $importmovesApi = $importmoves->connect();
@@ -81,10 +104,21 @@ namespace IdnoPlugins\Importmoves {
             return $profile;
         }
 
+        /**
+         * 
+         * @param string $access_token
+         * @param string $start
+         * @return type
+         */
         function getDailySummary($access_token, $start) {
             return $this->getRange($access_token, $start, $start);
         }
 
+        /**
+         * Groups activies (walking + running..)
+         * @param array $day
+         * @return array
+         */
         function construct_activity_group_array(array $day) {
             $groups = array(
                 "cycling" => array("label" => "cycling"), // 
@@ -121,6 +155,11 @@ namespace IdnoPlugins\Importmoves {
             }
         }
 
+        /**
+         * Returns the body of the entity depending on the different moves.
+         * @param array $day
+         * @return string $description
+         */
         function construct_content($day) {
             $distance = 0;
             $transport_distance = 0;
@@ -165,6 +204,14 @@ namespace IdnoPlugins\Importmoves {
             return $description;
         }
 
+        /**
+         * Gets the summary details of your moves between end and start date (Y-m-d)
+         * https://dev.moves-app.com/docs/api_summaries
+         * @param string $access_token
+         * @param string $start
+         * @param string $end
+         * @return boolean | array
+         */
         function getRange($access_token, $start, $end) {
             $endpoint = '/user/summary/daily';
             $importmoves = $this;
