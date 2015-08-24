@@ -26,3 +26,7 @@ See
 ---
  * examples : https://nxd4n.nixekinder.be/content/moves/
  * Author: Daniel Nix <http://nxd4n.nixekinder.be> 
+
+Credits
+-------
+ * This plugin is based and uses code from the http://reclaim.fm WP plugin https://github.com/espresto/reclaim-social-media (author [@diplix](https://github.com/diplix))
