@@ -25,7 +25,7 @@ $titel = "My Moves for {$fulldate}";
 $vars['object']->title = $titel;
 $vars['object']->body = $content;
 $vars['object']->data = json_encode($summary);
-$vars['object']->day = date('Ymd', strtotime('yesterday'));
+$day = $vars['object']->day = date('Ymd', strtotime('yesterday'));
 $vars['object']->tags = $tags;
 ?>
 <form action="<?= $vars['object']->getURL() ?>" method="post">
