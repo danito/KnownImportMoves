@@ -16,10 +16,11 @@ Usage
 -----
 Importmoves will let you create a new entity with the data from your yesterday moves.
 
-TODO's
-------
-[] Doesn't work well in IE
-[] Import all your data
+Known issues / TODO
+-------------------
+
+* [ ] Import all your data
+* [ ] doesn't work well in IE
 
 See
 ---
