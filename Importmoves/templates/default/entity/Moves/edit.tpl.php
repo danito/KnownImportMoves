@@ -20,7 +20,6 @@ foreach ($summary as $activity) {
 
 $data = $importmoves->construct_activity_group_array($moves[0]);
 $dataset = json_encode($data['data2']);
-echo "<pre>";print_r($data); echo "</pre>";
 $content = $importmoves->construct_content($data);
 $fulldate = date('j F Y', strtotime('yesterday'));
 $titel = "My Moves for {$fulldate}";
