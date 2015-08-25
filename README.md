@@ -21,6 +21,7 @@ Known issues / TODO
 
 * [ ] Import all your data
 * [ ] doesn't work well in IE
+* [ ] do it automatically
 
 See
 ---
