@@ -185,6 +185,7 @@ namespace IdnoPlugins\Importmoves {
             }
             if (isset($day['transport']['distance']) && $day['transport']['distance'] >= 1000) {
                 $transport_distance = intval($summary['distance']);
+
                 // 
                 $description .= sprintf((" and used transport for %s kilometers"), number_format((intval($day['transport']['distance']) / 1000), 1, ',', '.'));
             } else {
