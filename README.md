@@ -30,5 +30,5 @@ See
 
 Credits
 -------
- * This plugin is based and uses code from the http://reclaim.fm WP plugin https://github.com/espresto/reclaim-social-media (author [@diplix](https://github.com/diplix))
-* It imports 3d party js from http://d3js.org/
+ * This plugin is based and uses code from the http://reclaim.fm WP plugin https://github.com/espresto/reclaim-social-media (author [@diplix](https://github.com/diplix)).
+ *  It imports 3d party js from http://d3js.org/
