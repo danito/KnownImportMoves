@@ -292,7 +292,7 @@ $vars['object']->tags = $tags;
             ?>
             
             <?= $this->draw('entity/tags/input'); ?>
-            <?php if (empty($vars['object']->_id)) echo $this->drawSyndication('moves'); ?>
+            <?php if (empty($vars['object']->_id)) echo $this->drawSyndication('article'); ?>
             <?php if (empty($vars['object']->_id)) { ?>
                 <input type="hidden" name="forward-to" value="<?= \Idno\Core\site()->config()->getDisplayURL() . 'content/all/'; ?>" />
             <?php } ?>

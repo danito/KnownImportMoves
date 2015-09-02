@@ -7,7 +7,8 @@
             public $title = 'Moves';
             public $category_title = 'Moves';
             public $entity_class = 'IdnoPlugins\\Importmoves\\Moves';
-            //public $indieWebContentType = array('moves');
+            public $type = "article";
+            public $indieWebContentType = array('article','moves');
 
         }
 
