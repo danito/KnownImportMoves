@@ -41,11 +41,11 @@ namespace IdnoPlugins\Importmoves {
         }
 
         /**
-         * Tracks objects have type 'tracks'
-         * @return 'tracks'
+         * will be probably obsolete as all entities should be articles 
+         * @return 'article'
          */
         function getActivityStreamsObjectType() {
-            return 'moves';
+            return 'article';
         }
 
         /**
