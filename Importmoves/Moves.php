@@ -72,12 +72,11 @@ namespace IdnoPlugins\Importmoves {
             }
             if ($this->save()) {
 
-                if ($new) {
-                    $this->addToFeed();
-                }
+                return true;
+            } else {
+                return false;
             }
 
-            return true;
         }
 
     }
