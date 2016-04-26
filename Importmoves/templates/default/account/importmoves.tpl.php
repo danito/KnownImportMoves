@@ -47,8 +47,9 @@
                     $access_token = $user_tokens['user_token'];
                     $refresh_token = $user_tokens['user_refresh_token'];
                     $importmoves = \Idno\Core\site()->plugins()->get('Importmoves');
+
                     $validation = $importmoves->getTokenValidation($access_token);
-                    $refresh = false; 
+                    $refresh = false;
                     if ($validation === FALSE) {
                         $refresh = $importmoves->refreshToken($refresh_token);
                     } else {
@@ -61,7 +62,7 @@
                                 <div class="row">
                                     <div class="col-md-7">
                                         <p>
-                                            Ooops something went wrong (probably your token has expired). Please disconnect from Moves and retry again.
+                                            Ooops something went wrong. Please disconnect from Moves and retry again.
                                         </p>
 
                                         <div class="social">
@@ -75,7 +76,6 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
                     <div class="row">
 
                     </div>
@@ -101,7 +101,6 @@
                             </div>
                         </div>
                     </div>
-                    </form>
                     <div class="row">
                         <p>
                             You can now import your daily Move summary.<br>
@@ -111,7 +110,10 @@
                     <?php
                 }
             }
-        } else {
+            ?> <?= \Idno\Core\site()->actions()->signForm('/account/importmoves/') ?>
+    </form>
+<?php
+} else {
             if (\Idno\Core\site()->session()->currentUser()->isAdmin()) {
                 ?>
                 <div class="control-group">
@@ -145,3 +147,7 @@
         ?>
     </div>
 </div>            
+
+
+                    
+     

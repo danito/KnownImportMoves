@@ -23,7 +23,7 @@
             function postContent() {
                 $this->adminGatekeeper(); // Admins only
                 $moves_redirect_url = trim($this->getInput('moves_redirect_url'));
-           echo     $moves_client_id = trim($this->getInput('moves_client_id'));
+                $moves_client_id = trim($this->getInput('moves_client_id'));
                 $moves_client_secret = trim($this->getInput('moves_client_secret'));
                 \Idno\Core\site()->config->config['importmoves'] = array(
                     'moves_client_id' => $moves_client_id,
