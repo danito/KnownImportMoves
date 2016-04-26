@@ -47,9 +47,10 @@
                     $access_token = $user_tokens['user_token'];
                     $refresh_token = $user_tokens['refresh_token'];
                     $importmoves = \Idno\Core\site()->plugins()->get('Importmoves');
-
+                    error_log(print_r("VALIDATION"));
                     $validation = $importmoves->getTokenValidation($access_token);
-                    $refresh = false;
+                    error_log(print_r($validation));
+                    $refresh = false; 
                     if ($validation === FALSE) {
                         $refresh = $importmoves->refreshToken($refresh_token);
                     } else {
