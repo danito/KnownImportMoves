@@ -75,6 +75,9 @@
                         curl_close($ch);
                         error_log($result);
                         $token = json_decode($result, True);
+                        if (isset($token['error'])) {
+                            return false;
+                        }
                         return array('access_token' => $token['access_token'], 'refresh_token' => $token['refresh_token']);
                 }
                         
