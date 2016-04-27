@@ -13,12 +13,12 @@ $importmoves = \Idno\Core\site()->plugins()->get('Importmoves');
 $validation = $importmoves->getTokenValidation($access_token);
 $day = date('Ymd', strtotime("yesterday"));
 
-if (isset($vars['movesday']) && ($vars['movesday']) > $firstday && ($vars['movesday']) < $day){
+if (!empty($vars['movesday']) && ($vars['movesday']) > $firstday && ($vars['movesday']) <= $day){
   $day = $vars['movesday'];
   $dateTime = \DateTime::createFromFormat('Ymd|', $day);
   $timestamp = $dateTime->getTimestamp();
-} else {
-  $error = "Date must be in YYYYmmdd format and between ".$firstday." and ".$day;
+} elseif (!empty($vars['movesday']) ) {
+  $error = "Date must be in YYYYmmdd format and between ".$firstday." and ".$day." (".$vars['movesday'].")";
   \Idno\Core\site()->session()->addMessage($error);
 }
 $dateTime = \DateTime::createFromFormat('Ymd|', $day);
@@ -49,7 +49,9 @@ if (!empty($vars['object']->title)){
 $vars['object']->body = $content;
 $vars['object']->data = json_encode($data);
 $vars['object']->tags = $tags;
-$created = $timestamp + strtotime("+1 day") + strtotime("+9h");
+$vars['object']->day = $day;
+
+$created = $timestamp + 60 * 60 * 33;
 if ($created > time()){
   $created = time();
 }

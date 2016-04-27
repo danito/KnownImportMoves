@@ -66,12 +66,7 @@ namespace IdnoPlugins\Importmoves {
 
             $this->setAccess('PUBLIC');
             if ($time = \Idno\Core\site()->currentPage()->getInput('created')) {
-              error_log("TIME ".$time);
-                if ($time = strtotime($time)) {
-                  error_log("TIME2 ".$time);
-
-                    $this->created = $time;
-                }
+                $this->created = $time;
             }
             if ($this->save()) {
 

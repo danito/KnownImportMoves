@@ -11,7 +11,7 @@ namespace IdnoPlugins\Importmoves\Pages {
         $day = $this->getInput('day');
       }
       $edit = false;
-      $object = new \IdnoPlugins\Importmoves\Moves();
+
       if (!empty($this->arguments)) {
         // check if we are editing an existing entity
         $object = \IdnoPlugins\Importmoves\Moves::getByID($this->arguments[0]);
@@ -20,9 +20,11 @@ namespace IdnoPlugins\Importmoves\Pages {
       }
       // Are we loading an entity or does an entity with yesterday date already exists
       $moves_obj  = \IdnoPlugins\Importmoves\Moves::getOneFromAll(array('day' => $day));
-      if (!empty($moves_obj) && $edit == FALSE){
+      if (!empty($moves_obj) && $edit == false){
         $object = $moves_obj;
-        error_log("not empty yesterday");
+      }
+      if (empty($object)){
+          $object = new \IdnoPlugins\Importmoves\Moves();
       }
       $t = \Idno\Core\site()->template();
       $body = $t->__(array('object' => $object, 'movesday'=>$day))->draw('entity/Moves/edit');
