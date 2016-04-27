@@ -22,6 +22,7 @@ Known issues / TODO
 * [ ] Import all your data
 * [ ] doesn't work well in IE
 * [ ] do it automatically
+* [x] import any date (see https://github.com/danito/KnownImportMoves/issues/5)
 
 See
 ---
