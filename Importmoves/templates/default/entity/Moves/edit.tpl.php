@@ -1,13 +1,30 @@
 <?= $this->draw('entity/edit/header'); ?>
 <?php
+if (\Idno\Core\site()->currentPage()->isPermalink()) {
+    $rel = 'rel="in-reply-to"';
+} else {
+    $rel = '';
+}
 $user_tokens = \Idno\Core\site()->session()->currentUser()->importmoves;
 $access_token = $user_tokens['user_token'];
-$refresh_token = $user_tokens['refresh_token'];
+$refresh_token = $user_tokens['user_refresh_token'];
+$firstday = $user_tokens['user_first_date'];
 $importmoves = \Idno\Core\site()->plugins()->get('Importmoves');
 $validation = $importmoves->getTokenValidation($access_token);
-$strDate = 'yesterday';
-$yesterday = date('Y-m-d', strtotime($strDate));
-$moves = $importmoves->getDailySummary($access_token, $yesterday);
+$day = date('Ymd', strtotime("yesterday"));
+
+if (isset($vars['movesday']) && ($vars['movesday']) > $firstday && ($vars['movesday']) < $day){
+  $day = $vars['movesday'];
+  $dateTime = \DateTime::createFromFormat('Ymd|', $day);
+  $timestamp = $dateTime->getTimestamp();
+} else {
+  $error = "Date must be in YYYYmmdd format and between ".$firstday." and ".$day;
+  \Idno\Core\site()->session()->addMessage($error);
+}
+$dateTime = \DateTime::createFromFormat('Ymd|', $day);
+$timestamp = $dateTime->getTimestamp();
+
+$moves = $importmoves->getDailySummary($access_token, $day);
 $summary = $moves[0]['summary'];
 $totaldistance = $totalsteps = 0;
 
@@ -15,27 +32,34 @@ $totaldistance = $totalsteps = 0;
 $tags = "#moves ";
 foreach ($summary as $activity) {
     $a = $activity['activity'];
-    $tags = $tags . "#" . $a . " ";   
+    $tags = $tags . "#" . $a . " ";
 }
 
 $data = $importmoves->construct_activity_group_array($moves[0]);
 $dataset = json_encode($data['data2']);
 $content = $importmoves->construct_content($data);
-$fulldate = date('j F Y', strtotime('yesterday'));
-$titel = "My Moves for {$fulldate}";
 
-$vars['object']->title = $titel;
+$fulldate = date('j F Y', $timestamp);
+$titel = "My <i>Moves</i> for ".$fulldate;
+if (!empty($vars['object']->title)){
+  $titel = $vars['object']->title;
+} else {
+  $vars['object']->title = $titel;
+}
 $vars['object']->body = $content;
 $vars['object']->data = json_encode($data);
-$day = $vars['object']->day = date('Ymd', strtotime('yesterday'));
 $vars['object']->tags = $tags;
+$created = $timestamp + strtotime("+1 day") + strtotime("+9h");
+if ($created > time()){
+  $created = time();
+}
 ?>
 <form action="<?= $vars['object']->getURL() ?>" method="post">
     <input type="hidden" name="title" id="title" value="<?= htmlspecialchars($vars['object']->title) ?>"  />
     <input type="hidden" name="body" id="body" value="<?= htmlspecialchars($vars['object']->body) ?>"  />
     <input type="hidden" name="data" id="data" value='<?= ($vars['object']->data) ?>'  />
     <input type="hidden" name="tags" id="tags" value="<?= ($vars['object']->tags) ?>"  />
-    <input type="hidden" name="created" id="created" value="<?= ($vars['object']->created) ?>"  />
+    <input type="hidden" name="created" id="created" value="<?= ($created) ?>"  />
     <input type="hidden" name="day" id="day" value="<?= ($vars['object']->day) ?>"  />
     <div class="row idno-entry">
 
@@ -290,7 +314,7 @@ $vars['object']->tags = $tags;
                 <?php
             }
             ?>
-            
+
             <?= $this->draw('entity/tags/input'); ?>
             <?php if (empty($vars['object']->_id)) echo $this->drawSyndication('article'); ?>
             <?php if (empty($vars['object']->_id)) { ?>

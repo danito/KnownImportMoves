@@ -30,13 +30,10 @@
                                 error_log("postcontent");
 
                 $this->gatekeeper(); // Logged-in users only
-                print("TRY TO DELETE moves token") ;
-                    error_log(print_r($user->importmoves, true)) ;
+
                 if (($this->getInput('remove'))) {
                     $user = \Idno\Core\site()->session()->currentUser();
                     $user->importmoves = array();
-                    error_log("DELETE moves token") ;
-                    error_log(print_r($user->importmoves, true)) ;
                     $user->save();
                     \Idno\Core\site()->session()->addMessage('Your Moves settings have been removed from your account.');
                 }

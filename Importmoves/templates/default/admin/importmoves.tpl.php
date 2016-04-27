@@ -29,7 +29,7 @@
                 <label class="control-label" for="moves_redirect_url">Moves redirect url should be set to </label>
 
                 <input type="url" id="moves_redirect_url" placeholder="" class="form-control" name="moves_redirect_url" value="<?=\Idno\Core\site()->config()->url . 'importmoves/callback'?>"  >
-                
+
                 <label class="control-label" for="moves_client_id">Moves Client Id</label>
 
                 <input type="text" id="moves_client_id" placeholder="client_id" class="form-control" name="moves_client_id" value="<?= htmlspecialchars(\Idno\Core\site()->config()->importmoves['moves_client_id']) ?>" >
@@ -38,18 +38,18 @@
 
                 <input type="text" id="moves_client_secret" placeholder="client_secret" class="form-control" name="moves_client_secret" value="<?= htmlspecialchars(\Idno\Core\site()->config()->importmoves['moves_client_secret']) ?>" >
 
-            </div>     	            
+            </div>
             <div class="controls-group">
 
 
-            </div>  
+            </div>
 
             <div>
                 <div class="controls-save">
                     <button type="submit" class="btn btn-primary">Save settings</button>
                 </div>
             </div>
-            <?= \Idno\Core\site()->actions()->signForm('/admin/twitter/') ?>
+            <?= \Idno\Core\site()->actions()->signForm('/admin/importmoves/') ?>
         </form>
     </div>
 </div>

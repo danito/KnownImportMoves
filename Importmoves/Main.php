@@ -92,7 +92,7 @@ namespace IdnoPlugins\Importmoves {
         }
 
         /**
-         * Returns Moves-App profile details 
+         * Returns Moves-App profile details
          * https://dev.moves-app.com/docs/api_profile
          * @param string $access_token
          * @return array
@@ -105,7 +105,7 @@ namespace IdnoPlugins\Importmoves {
         }
 
         /**
-         * 
+         *
          * @param string $access_token
          * @param string $start
          * @return type
@@ -121,9 +121,9 @@ namespace IdnoPlugins\Importmoves {
          */
         function construct_activity_group_array(array $day) {
             $groups = array(
-                "cycling" => array("label" => "cycling"), // 
-                "running" => array("label" => ("running")), // 
-                "walking" => array("label" => ("walking")), // 
+                "cycling" => array("label" => "cycling"), //
+                "running" => array("label" => ("running")), //
+                "walking" => array("label" => ("walking")), //
                 "transport" => array("label" => ("transport")));
             if (isset($day['summary'])) {
                 $data = array();
@@ -186,7 +186,7 @@ namespace IdnoPlugins\Importmoves {
             if (isset($day['transport']['distance']) && $day['transport']['distance'] >= 1000) {
                 $transport_distance = intval($summary['distance']);
 
-                // 
+                //
                 $description .= sprintf((" and used transport for %s kilometers"), number_format((intval($day['transport']['distance']) / 1000), 1, ',', '.'));
             } else {
                 $description .= "";

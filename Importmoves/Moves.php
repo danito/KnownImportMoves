@@ -11,7 +11,7 @@ namespace IdnoPlugins\Importmoves {
                 return $this->title;
             }
         }
-        
+
         function getURL()
             {
                 // If we have a URL override, use it
@@ -41,7 +41,7 @@ namespace IdnoPlugins\Importmoves {
         }
 
         /**
-         * will be probably obsolete as all entities should be articles 
+         * will be probably obsolete as all entities should be articles
          * @return 'article'
          */
         function getActivityStreamsObjectType() {
@@ -49,7 +49,7 @@ namespace IdnoPlugins\Importmoves {
         }
 
         /**
-         * @return bool 
+         * @return bool
          */
         function saveDataFromInput() {
 
@@ -66,7 +66,10 @@ namespace IdnoPlugins\Importmoves {
 
             $this->setAccess('PUBLIC');
             if ($time = \Idno\Core\site()->currentPage()->getInput('created')) {
+              error_log("TIME ".$time);
                 if ($time = strtotime($time)) {
+                  error_log("TIME2 ".$time);
+
                     $this->created = $time;
                 }
             }
