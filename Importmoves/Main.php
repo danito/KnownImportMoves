@@ -78,6 +78,7 @@ namespace IdnoPlugins\Importmoves {
             $importmoves = $this;
             $importmovesApi = $importmoves->connect();
             $tokens = $importmovesApi->refresh($refresh_token);
+            $profile = $this->getProfile($tokens['access_token']);
             if (!empty($tokens)) {
                 $user = \Idno\Core\site()->session()->currentUser();
                 $user->$importmoves[$profile['userId']] = array(
